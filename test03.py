@@ -92,7 +92,7 @@ if __name__ == "__main__":
     train_loader = torch.utils.data.DataLoader(train_ds, batch_size=128, shuffle=True)
     val_loader = torch.utils.data.DataLoader(val_ds, batch_size=128, shuffle=False)
     
-    model = TestNet(mode=args.biased).cuda()
+    model = TestNet().cuda()
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
     
     tqdm_loader = tqdm(range(20))
