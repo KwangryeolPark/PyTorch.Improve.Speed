@@ -15,6 +15,9 @@ torch:  2.0.1
 torchvision:    0.15.2
 
 MNIST
+No scheduler
+20 epochs with tqdm
+128 batch size
 ```
 
 # test01
