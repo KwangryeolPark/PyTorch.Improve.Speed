@@ -23,9 +23,9 @@ from tqdm import tqdm
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--num_workers", type=int, required=True)
-parser.add_argument("--pin_memory", type=bool, required=True)
+parser.add_argument("--pin_memory", type=int, required=True)
 args = parser.parse_args()
-
+    
 class TestNet(nn.Module):
     def __init__(self):
         super(TestNet, self).__init__()
@@ -74,7 +74,7 @@ def val(model, val_loader):
 
 if __name__ == "__main__":
     import time
-    
+
 ####################################################################################################
     transform = transforms.Compose([
         transforms.ToTensor(),
@@ -82,8 +82,8 @@ if __name__ == "__main__":
     train_ds = datasets.MNIST(root="./data", train=True, download=True, transform=transform)
     val_ds = datasets.MNIST(root="./data", train=False, download=True, transform=transform)
     
-    train_loader = torch.utils.data.DataLoader(train_ds, batch_size=128, shuffle=True, num_workers=args.num_workers, pin_memory=args.pin_memory)
-    val_loader = torch.utils.data.DataLoader(val_ds, batch_size=128, shuffle=False, num_workers=args.num_workers, pin_memory=args.pin_memory)
+    train_loader = torch.utils.data.DataLoader(train_ds, batch_size=128, shuffle=True, num_workers=args.num_workers, pin_memory=True if args.pin_memory == 1 else False)
+    val_loader = torch.utils.data.DataLoader(val_ds, batch_size=128, shuffle=False, num_workers=args.num_workers, pin_memory=True if args.pin_memory == 1 else False)
     
     model = TestNet().cuda()
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
@@ -96,7 +96,7 @@ if __name__ == "__main__":
         
     elapsed_time = time.time() - start
     print("elapsed time: ", elapsed_time)
-    with open(f"docs/test02_num_workers{args.num_workers}_pin_memory{args.pin_memory}.txt", "a") as f:
+    with open(f"docs/test02_num_workers{args.num_workers}_pin_memory{True if args.pin_memory == 1 else False}.txt", "a") as f:
         f.write(str(elapsed_time) + "\n")
     
 ####################################################################################################
